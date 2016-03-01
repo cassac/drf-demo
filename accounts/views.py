@@ -5,12 +5,20 @@ from .serializers import UserSerializer, SingleFortuneSerializer, FortuneSeriali
 
 from .models import Fortune
 
-class UserView(APIView):
+class UserList(APIView):
 	def get(self, request, user_id=None):
 		context = {'request': request}
 		users = User.objects.all()
 		serializer = UserSerializer(users, many=True, context=context)
 		return Response(serializer.data)
+
+class UserDetail(APIView):
+	def get(self, request, user_id=None):
+		context = {'request': request}
+		user = User.objects.filter(id=user_id)
+		serializer = UserSerializer(user, many=True, context=context)
+		return Response(serializer.data)
+
 
 class FortuneView(APIView):
 	def get(self, request, user_id):
