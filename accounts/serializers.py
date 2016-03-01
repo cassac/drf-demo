@@ -1,25 +1,31 @@
-from django.conf.urls import url, include
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from rest_framework.reverse import reverse
 from .models import Fortune
+
+class SingleFortuneSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = Fortune
+		fields = ('id', 'content',)
+		# extra_kwargs = {
+		# 	'url': {'view_name': 'fortune-detail', 'lookup_field': 'user_id'},
+		# }	
 
 class FortuneSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Fortune
-		fields = ('id', 'content',)
+		fields = ('url', 'id', 'content',)
+		extra_kwargs = {
+			'url': {'view_name': 'fortune-list', 'lookup_field': 'user_id'},
+		}		
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 	fortunes = FortuneSerializer(
 		many=True,
 		)
-	url = serializers.HyperlinkedIdentityField(
-		view_name='user-detail',
-		lookup_field='pk'
-	)	
 
 	class Meta:
 		model = User
-		fields = ('url', 'username', 'email', 'is_staff', 'fortunes',)
+		fields = ('username', 'email', 'is_staff', 'fortunes',)
