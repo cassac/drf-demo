@@ -6,18 +6,15 @@ from .models import Fortune
 
 class FortuneSerializer(serializers.HyperlinkedModelSerializer):
 
-
 	class Meta:
 		model = Fortune
-		fields = ('url', 'content',)
+		fields = ('id', 'content',)
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 	fortunes = FortuneSerializer(
 		many=True, 
-		# view_name='fortunes',
-		# lookup_url_kwarg='fortune_id',
 		)
 
 	class Meta:

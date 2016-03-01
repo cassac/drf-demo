@@ -36,15 +36,21 @@ class FortuneViewSet(viewsets.ModelViewSet):
 	serializer_class = FortuneSerializer
 
 	def retrieve(self, request, user_id=None, fortune_id=None):
-		queryset = Fortune.objects.all()
+		print 'RETRIEVING'
+		queryset = Fortune.objects.filter(user=user_id).all()
 		fortune = get_object_or_404(queryset, pk=fortune_id)
-		serializer = self.get_serializer(fortune, many=False)
+		serializer = FortuneSerializer(fortune, many=False)
 		return Response(serializer.data)	
+
+	def update(self, request, user_id=None, fortune_id=None):
+		print 'UPDATE'
+		return Response({'status': 'fortune not created'})
 
 class FortuneAllViewSet(viewsets.ModelViewSet):
     model = Fortune
     serializer_class = FortuneSerializer
 
     def get_queryset(self):
+    	print 'getting'
         user = self.request.user
         return user.fortunes.all()
