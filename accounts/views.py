@@ -26,6 +26,10 @@ class FortuneView(APIView):
 		fortunes = Fortune.objects.filter(user__id=user_id)
 		serializer = FortuneSerializer(fortunes, many=True, context=context)
 		return Response(serializer.data)
+	
+	def post(self, request):
+		pass
+
 
 class FortuneDetailView(APIView):
 	def get(self, request, user_id, fortune_id):

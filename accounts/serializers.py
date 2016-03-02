@@ -22,9 +22,7 @@ class FortuneSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
 
-	fortunes = FortuneSerializer(
-		many=True,
-		)
+	fortunes = FortuneSerializer(many=True)
 
 	class Meta:
 		model = User
