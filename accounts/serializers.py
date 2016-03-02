@@ -19,8 +19,9 @@ class FortuneSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
 
-	# fortunes = FortuneSerializer(many=True)
+	fortunes = FortuneSerializer(many=True)
 
 	class Meta:
 		model = User
-		fields = ('username', 'email', 'is_staff')#, 'fortunes',)
+		fields = ('username', 'email', 'is_staff', 'fortunes')
+		lookup_field = 'user_id'
