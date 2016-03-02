@@ -9,4 +9,3 @@ class Fortune(models.Model):
 
 	def __str__(self):
 		return "Fortune: %s" % self.content
-
