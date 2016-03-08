@@ -2,18 +2,19 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Fortune, Picture
 
-class FortuneSerializer(serializers.ModelSerializer):
-
-	class Meta:
-		model = Fortune
-		fields = ('id', 'content', 'pictures')
-
 class PictureSerializer(serializers.ModelSerializer):
-	# image = serializers.ImageField('image.url')
 
 	class Meta:
 		model = Picture
 		fields = ('id', 'image')
+
+class FortuneSerializer(serializers.ModelSerializer):
+
+	pictures = PictureSerializer(many=True)
+
+	class Meta:
+		model = Fortune
+		fields = ('id', 'content', 'pictures')
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
 
