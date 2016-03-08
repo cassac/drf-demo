@@ -1,12 +1,19 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Fortune
+from .models import Fortune, Picture
 
 class FortuneSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Fortune
-		fields = ('id', 'content',)
+		fields = ('id', 'content', 'pictures')
+
+class PictureSerializer(serializers.ModelSerializer):
+	# image = serializers.ImageField('image.url')
+
+	class Meta:
+		model = Picture
+		fields = ('id', 'image')
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
 
@@ -18,5 +25,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 	class Meta:
 		model = User
-		fields = ('url', 'fortune_list', 'username', 'email', 'is_staff', 'fortunes')
+		fields = ('url', 'fortune_list', 'username', 'email', 'is_staff', 
+			'fortunes')
 		extra_kwargs = {'url': {'lookup_url_kwarg': 'user_id'}}
