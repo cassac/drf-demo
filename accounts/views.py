@@ -30,11 +30,6 @@ class FortuneList(generics.ListCreateAPIView):
 		serializer = FortuneSerializer(queryset, many=True)
 		return Response(serializer.data)
 
-	def perform_create(self, serializer):
-		d = serializer.save(user_id=self.kwargs['user_id'])
-		print dir(serializer)
-		print d.id
-
 class FortuneDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Fortune.objects.all()
 	serializer_class = FortuneSerializer

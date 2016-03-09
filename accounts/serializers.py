@@ -16,6 +16,11 @@ class FortuneSerializer(serializers.ModelSerializer):
 		model = Fortune
 		fields = ('id', 'content', 'pictures')
 
+	def create(self, validated_data):
+		pictures = validated_data.pop('pictures')
+		# need to save pictures
+		return Fortune.objects.create(**validated_data)
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 	fortunes = FortuneSerializer(many=True, read_only=True)
