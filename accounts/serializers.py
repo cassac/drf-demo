@@ -4,8 +4,6 @@ from .models import Fortune, Picture
 
 class PictureSerializer(serializers.ModelSerializer):
 
-	# image = serializers.ImageField(max_length=None, allow_empty_file=False)
-
 	class Meta:
 		model = Picture
 		fields = ('id', 'image')
