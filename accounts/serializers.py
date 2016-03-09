@@ -23,7 +23,7 @@ class FortuneSerializer(serializers.ModelSerializer):
 		fortune = Fortune.objects.create(user=self.context['request'].user, **validated_data)
 		if pictures:
 			p=Picture(fortune=fortune)
-			p.image.save('mypicture.png', pictures)
+			p.image.save(str(pictures), pictures)
 		return fortune
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
