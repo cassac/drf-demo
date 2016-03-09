@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework.parsers import FileUploadParser
 from .serializers import UserSerializer, FortuneSerializer, PictureSerializer
 
 from .models import Fortune, Picture
@@ -29,6 +30,9 @@ class FortuneList(generics.ListCreateAPIView):
 		queryset = Fortune.objects.filter(user__id=user_id)
 		serializer = FortuneSerializer(queryset, many=True)
 		return Response(serializer.data)
+
+	# def perform_create(self, serializer):
+	# 	d = serializer.save(user_id=self.kwargs['user_id'])
 
 class FortuneDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Fortune.objects.all()
