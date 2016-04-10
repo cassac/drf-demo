@@ -2,27 +2,37 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Fortune, Picture
 
-class PictureSerializer(serializers.ModelSerializer):
-
-	class Meta:
-		model = Picture
-		fields = ('id', 'image')
 
 class FortuneSerializer(serializers.ModelSerializer):
 	# pictures = PictureSerializer(many=True)
-	pictures = serializers.ImageField(max_length=None, allow_empty_file=False)
+	# pictures = serializers.ImageField(max_length=None, allow_empty_file=False)
 
 	class Meta:
 		model = Fortune
 		fields = ('id', 'content', 'pictures')
 
 	def create(self, validated_data):
-		pictures = validated_data.pop('pictures')
-		fortune = Fortune.objects.create(user=self.context['request'].user, **validated_data)
-		if pictures:
-			p=Picture(fortune=fortune)
-			p.image.save(str(pictures), pictures)
-		return fortune
+	    pictures = validated_data.pop('pictures')
+	    fortune = Fortune.objects.create(user=self.context['request'].user, **validated_data)
+	    if pictures:            
+	        [Picture(fortune=fortune, image=picture) for picture in pictures]
+
+	    return fortune
+
+
+		# pictures = validated_data.pop('pictures')
+		# fortune = Fortune.objects.create(user=self.context['request'].user, **validated_data)
+		# if pictures:
+		# 	p=Picture(fortune=fortune)
+		# 	p.image.save(str(pictures), pictures)
+		# return fortune
+
+class PictureSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		list_serializer_class = FortuneSerializer
+		# model = Picture
+		# fields = ('id', 'image')
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
 
