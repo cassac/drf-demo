@@ -3,6 +3,9 @@ from rest_framework import serializers
 from .models import Fortune, Picture
 
 
+# login: u1
+# pass: user
+
 class FortuneSerializer(serializers.ModelSerializer):
 	# pictures = PictureSerializer(many=True)
 	# pictures = serializers.ImageField(max_length=None, allow_empty_file=False)
