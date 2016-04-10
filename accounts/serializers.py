@@ -7,8 +7,6 @@ from .models import Fortune, Picture
 # pass: user
 
 class FortuneSerializer(serializers.ModelSerializer):
-	# pictures = PictureSerializer(many=True)
-	# pictures = serializers.ImageField(max_length=None, allow_empty_file=False)
 
 	class Meta:
 		model = Fortune
@@ -17,25 +15,18 @@ class FortuneSerializer(serializers.ModelSerializer):
 	def create(self, validated_data):
 	    pictures = validated_data.pop('pictures')
 	    fortune = Fortune.objects.create(user=self.context['request'].user, **validated_data)
+
 	    if pictures:            
 	        [Picture(fortune=fortune, image=picture) for picture in pictures]
 
 	    return fortune
 
 
-		# pictures = validated_data.pop('pictures')
-		# fortune = Fortune.objects.create(user=self.context['request'].user, **validated_data)
-		# if pictures:
-		# 	p=Picture(fortune=fortune)
-		# 	p.image.save(str(pictures), pictures)
-		# return fortune
-
 class PictureSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		list_serializer_class = FortuneSerializer
-		# model = Picture
-		# fields = ('id', 'image')
+
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
 
