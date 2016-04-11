@@ -13,13 +13,14 @@ class FortuneSerializer(serializers.ModelSerializer):
 		fields = ('id', 'content', 'pictures')
 
 	def create(self, validated_data):
-	    pictures = validated_data.pop('pictures')
-	    fortune = Fortune.objects.create(user=self.context['request'].user, **validated_data)
 
-	    if pictures:            
-	        [Picture(fortune=fortune, image=picture) for picture in pictures]
+		pictures = validated_data.pop('pictures')
+		fortune = Fortune.objects.create(user=self.context['request'].user, **validated_data)
 
-	    return fortune
+		if pictures:            
+			[Picture(fortune=fortune, image=picture) for picture in pictures]
+
+		return fortune
 
 
 class PictureSerializer(serializers.ModelSerializer):
