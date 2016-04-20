@@ -1,4 +1,8 @@
+import os
+import datetime
+from PIL import Image
 from django.contrib.auth.models import User
+from django.conf import settings
 from rest_framework import generics
 from rest_framework.response import Response
 from .serializers import (UserSerializer, FortuneSerializer, PictureSerializer,
@@ -37,9 +41,20 @@ class FortuneList(generics.ListCreateAPIView):
 		fortune = Fortune(user_id=user_id, content=content)
 		fortune.save()
 
+		today = datetime.datetime.today()
+
 		if pictures:
-			pictures_instances = [Picture(fortune=fortune, image=picture).save()
-									for picture in pictures]
+			for picture in pictures:
+				image = Image.open(picture)
+				image_type = picture.split('.')[-1]
+				filename = picture.split('/')[-1]
+				dir_structure = '%d/%02d/%02d' % (today.year, today.month, today.day)
+				path = os.path.join(dir_structure, filename)
+				p = Picture(fortune=fortune)
+				p.image = path
+				p.save()
+				full_path = os.path.join(settings.MEDIA_ROOT, path)
+				image.save(full_path, image_type)
 
 		queryset = fortune
 		serializer = FortuneSerializer(queryset)
