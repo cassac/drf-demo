@@ -1,15 +1,13 @@
 from django.contrib.auth.models import User
 from rest_framework import generics
 from rest_framework.response import Response
-from .serializers import UserSerializer, FortuneSerializer, PictureSerializer
+from .serializers import (UserSerializer, FortuneSerializer, PictureSerializer,
+	PictureListSerializer)
 from .models import Fortune, Picture
 
 class PictureList(generics.ListCreateAPIView):
 	queryset = Picture.objects.all()
-	serializer_class = PictureSerializer
-
-	def perform_create(self, serializer):
-		serializer.save(fortune_id=1)
+	serializer_class = PictureListSerializer
 
 class UserList(generics.ListCreateAPIView):
 	queryset = User.objects.all()

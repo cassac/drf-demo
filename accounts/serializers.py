@@ -6,19 +6,23 @@ from .models import Fortune, Picture
 # login: u1
 # pass: user
 
+class PictureListSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = Picture
+		fields = ('id', 'image', 'fortune',)
+
 class FortuneSerializer(serializers.ModelSerializer):
+
+	pictures = PictureListSerializer(many=True, read_only=True)
 
 	class Meta:
 		model = Fortune
 		fields = ('id', 'content', 'pictures')
 
 	def create(self, validated_data):
-		print 'serializer create'
 		pictures = validated_data.pop('pictures')
 		fortune = Fortune.objects.create(user=self.context['request'].user, **validated_data)
-
-		# if pictures:            
-		# 	[Picture(fortune=fortune, image=picture) for picture in pictures]
 
 		return fortune
 
