@@ -50,9 +50,7 @@ class FortuneList(generics.ListCreateAPIView):
 				filename = picture.split('/')[-1]
 				dir_structure = '%d/%02d/%02d' % (today.year, today.month, today.day)
 				path = os.path.join(dir_structure, filename)
-				p = Picture(fortune=fortune)
-				p.image = path
-				p.save()
+				Picture(fortune=fortune, image=path).save()
 				full_path = os.path.join(settings.MEDIA_ROOT, path)
 				image.save(full_path, image_type)
 
