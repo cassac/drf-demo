@@ -23,8 +23,9 @@ class FortuneList(generics.ListCreateAPIView):
 	serializer_class = FortuneSerializer
 
 	def list(self, request, user_id):
+		context={'request': request}
 		queryset = Fortune.objects.filter(user__id=user_id)
-		serializer = FortuneSerializer(queryset, many=True)
+		serializer = FortuneSerializer(queryset, many=True, context=context)
 		return Response(serializer.data)
 
 	def create(self, request, user_id):
