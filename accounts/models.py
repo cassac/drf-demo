@@ -13,3 +13,6 @@ class Fortune(models.Model):
 class Picture(models.Model):
 	fortune = models.ForeignKey(Fortune, related_name='pictures')
 	image = models.ImageField(upload_to='%Y/%m/%d')
+
+	def __str__(self):
+		return "Picture: %s" % self.id	
