@@ -1,0 +1,58 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Get your fortune</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+	</head>
+	<body>
+		<div class='container'>
+			<h1>Testing</h1>
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+		<script>
+			$(document).ready(function() {
+				function createElement(tag, text, attributes) {
+					$element = $('<' + tag + '>');
+					if (text) {
+						$element.text(text);
+					}
+					if (attributes) {
+						for (var key in attributes) {
+							$element.attr(key, attributes[key]);
+						}
+					}
+					return $element;
+				}
+				$.get('http://localhost:8000/users/', 'json', function(fortunes) {
+					fortunes.forEach(function(user) {
+						$('div.container').append(createElement('button', 
+							user.username,
+							{'data-username': user.username,
+							'data-fortune_list': user.fortune_list,
+							'class': 'user'}))
+					});
+					$('.user').on('click', function() {
+						$url = $(this).data('fortune_list');					
+						$.get($url, 'json', function(fortunes) {
+							$ul = $('<ul>');
+							fortunes.forEach(function(fortune) {
+								$li = createElement('li', fortune.content);
+								if (fortune.pictures.length) {
+									fortune.pictures.forEach(function(picture) {
+										$li.append(createElement('img', null, {'src': picture.image}))
+									})
+								}
+								$ul.append($li);
+							})
+							$('body').append($ul)
+						})
+					})
+				})
+			})
+		</script>
+	</body>
+</html>

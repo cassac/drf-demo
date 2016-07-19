@@ -1,9 +1,11 @@
 from django.conf.urls import url, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
 from . import views
 
 urlpatterns = [
+	url(r'^$', TemplateView.as_view(template_name="accounts/index.html")),
 	url(r'^users/$', views.UserList.as_view(), name='user-list'),
     url(r'^users/(?P<user_id>[0-9]*)/$', views.UserDetail.as_view(), name='user-detail'),
     url(r'^users/(?P<user_id>[0-9]*)/fortunes/$', views.FortuneList.as_view(), name='fortune-list'),
