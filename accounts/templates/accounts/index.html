@@ -8,47 +8,49 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 	</head>
 	<body>
-		<div class='container'>
+		<div id='fortunes' class='container'>
 			<h1>Testing</h1>
 		</div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 		<script>
 			$(document).ready(function() {
-				function createElement(tag, text, attributes) {
-					$element = $('<' + tag + '>');
-					if (text) {
-						$element.text(text);
-					}
-					if (attributes) {
-						for (var key in attributes) {
-							$element.attr(key, attributes[key]);
+				function createElement(type) {
+					$element = $('<' + type + '>');
+					$arguments = Array.prototype.slice.call(arguments, 1);
+					$arguments.forEach(function(obj, index) {
+						for (key in obj) {
+							if (key === 'text') {
+								$element.text(obj[key]);
+							} else {
+								$element.attr(key, obj[key]);
+							}
 						}
-					}
+					})
 					return $element;
 				}
-				$.get('http://localhost:8000/users/', 'json', function(fortunes) {
-					fortunes.forEach(function(user) {
-						$('div.container').append(createElement('button', 
-							user.username,
-							{'data-username': user.username,
-							'data-fortune_list': user.fortune_list,
-							'class': 'user'}))
+				$.get('http://localhost:8000/users/', 'json', function(users) {
+					users.forEach(function(user) {
+						console.log(user)
+						$well = createElement('div', {class: 'panel panel-default'})
+						.append(createElement('div', {class: 'panel-body', 'data-fortune-list':user.fortune_list})
+						.append(createElement('p', {text: user.username, class: 'user'})));
+						$('#fortunes').append($well);
 					});
-					$('.user').on('click', function() {
-						$url = $(this).data('fortune_list');					
+					$('.panel-body').on('click', function(event) {
+						$url = $(this).data('fortune-list');
 						$.get($url, 'json', function(fortunes) {
 							$ul = $('<ul>');
 							fortunes.forEach(function(fortune) {
-								$li = createElement('li', fortune.content);
+								$li = createElement('li', {text: fortune.content});
 								if (fortune.pictures.length) {
 									fortune.pictures.forEach(function(picture) {
-										$li.append(createElement('img', null, {'src': picture.image}))
+										$li.append(createElement('img', {'src': picture.image, width: '50px', height: '50px'}))
 									})
 								}
 								$ul.append($li);
 							})
-							$('body').append($ul)
+							$(event.currentTarget).append($ul)
 						})
 					})
 				})
